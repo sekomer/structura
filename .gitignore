@@ -1,0 +1,7 @@
+build
+.vscode
+.git
+wheelhouse
+dist
+MANIFEST
+structura.egg-info
