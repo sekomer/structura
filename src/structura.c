@@ -1,8 +1,9 @@
 #define PY_SSIZE_T_CLEAN
 #include <Python.h>
 
-extern PyTypeObject RingBufferType;
 extern PyTypeObject StackType;
+extern PyTypeObject LinkedType;
+extern PyTypeObject RingBufferType;
 
 static PyObject *
 method_fputs(PyObject *self, PyObject *args)
@@ -63,6 +64,13 @@ PyMODINIT_FUNC PyInit_structura(void)
 
     Py_INCREF(&StackType);
     PyModule_AddObject(module, "Stack", (PyObject *)&StackType);
+
+    /* Add LinkedList type */
+    if (PyType_Ready(&LinkedType) < 0)
+        return NULL;
+
+    Py_INCREF(&LinkedType);
+    PyModule_AddObject(module, "LinkedList", (PyObject *)&LinkedType);
 
     return module;
 }

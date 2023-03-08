@@ -11,6 +11,7 @@ set(SOURCES
     structura.c
     ringbuffer.c
     stack.c
+    linked.c
 )
 
 # add headers from include directory

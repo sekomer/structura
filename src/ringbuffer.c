@@ -122,6 +122,9 @@ RingBuffer_dequeue(RingBuffer *self)
     return item;
 }
 
+// TODO: FIX THE SEGMENTATION FAULT
+// PROBABLY THE PROBLEM IS WE ARE STORING PYTHON OBJECTS
+// WE ARE HOLDING REFERENCES TO THEM INSTEAD OF COPYING THEM
 static PyObject *
 RingBuffer_peek(RingBuffer const *self)
 {

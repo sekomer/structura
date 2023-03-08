@@ -41,11 +41,16 @@ To build `structura` from source, you should clone the repo and run the followin
 
 What's New
 ----------
-Ring buffers have been added.
+- 0.1.2
+    - RingBuffer
+- 0.2.0
+    - Stack
+    - LinkedList
+
 
 What's Coming
 -------------
-Linked Lists, Queues, Stacks, Hash Tables, Trees.
+Queues, Hash Tables, Trees, iterables.
 
 Proposals for enhancement
 -------------------------
