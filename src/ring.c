@@ -79,7 +79,6 @@ RingBuffer_is_full(RingBuffer const *self)
 static PyObject *
 RingBuffer_enqueue(RingBuffer *self, PyObject *args)
 {
-    // its only works with integers, solve that and make it work with any type
     PyObject *item = NULL;
 
     if (!PyArg_ParseTuple(args, "O", &item))
@@ -105,6 +104,7 @@ RingBuffer_enqueue(RingBuffer *self, PyObject *args)
         self->size++;
     }
 
+    // TODO: research, should i decref here?
     Py_RETURN_NONE;
 }
 
@@ -122,16 +122,16 @@ RingBuffer_dequeue(RingBuffer *self)
     return item;
 }
 
-// TODO: FIX THE SEGMENTATION FAULT
-// PROBABLY THE PROBLEM IS WE ARE STORING PYTHON OBJECTS
-// WE ARE HOLDING REFERENCES TO THEM INSTEAD OF COPYING THEM
 static PyObject *
 RingBuffer_peek(RingBuffer const *self)
 {
     if (self->size == 0)
         Py_RETURN_NONE;
 
-    return self->items[self->head];
+    PyObject *item = self->items[self->head];
+    Py_INCREF(item);
+
+    return item;
 }
 
 static PyObject *

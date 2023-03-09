@@ -62,6 +62,19 @@ class TestStack(unittest.TestCase):
             s.push(f'qwerqwer[{i}]]')
         self.assertRaises(IndexError, s.push, 'qwerqwer')
 
+    def test_chaos(self):
+        s = Stack(32)
+        for i in range(1000):
+            s.push(f'qwerqwer[{i}]]')
+            self.assertEqual(s.peek(), f'qwerqwer[{i}]]')
+            self.assertEqual(s.pop(), f'qwerqwer[{i}]]')
+            self.assertEqual(s.size(), 0)
+            self.assertTrue(s.is_empty())
+            self.assertFalse(s.is_full())
+
+        for i in range(1000):
+            self.assertRaises(IndexError, s.pop)
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -56,6 +56,22 @@ class TestRingBuffer(unittest.TestCase):
         rb = RingBuffer(32)
         self.assertEqual(rb.peek(), None)
 
+    def test_chaos(self):
+        rb = RingBuffer(32)
+        for i in range(100):
+            rb.enqueue(f'qwerqwer[{i}]]')
+            rb.peek()
+            rb.is_empty()
+            rb.is_full()
+            rb.size()
+
+        for i in range(1000):
+            rb.dequeue()
+            rb.peek()
+            rb.is_empty()
+            rb.is_full()
+            rb.size()
+
 
 if __name__ == '__main__':
     unittest.main()

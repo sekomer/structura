@@ -3,7 +3,7 @@ from structura import RingBuffer
 
 
 # python ringbuffer implementation
-class RingBuffer:
+class TestBuffer:
     def __init__(self, size):
         self.size = size
         self.data = [None] * size
@@ -40,34 +40,34 @@ class RingBuffer:
 
 def native():
     # generate a speed test for pyhon ringbuffer
-    rb = RingBuffer(10000000)
-    for i in range(10000000):
+    rb = TestBuffer(100000)
+    for i in range(100000):
         rb.enqueue(f'qwerqwer[{i}]]')
-    for i in range(10000000):
+    for i in range(100000):
         rb.dequeue()
 
 
 def external():
     # generate a speed test for structura ringbuffer
-    rb = RingBuffer(10000000)
-    for i in range(10000000):
+    rb = RingBuffer(100000)
+    for i in range(100000):
         rb.enqueue(f'qwerqwer[{i}]]')
-    for i in range(10000000):
+    for i in range(100000):
         rb.dequeue()
 
 
 def builtin():
     # generate a speed test for python deque
-    rb = deque(maxlen=10000000)
-    for i in range(10000000):
+    rb = deque(maxlen=100000)
+    for i in range(100000):
         rb.append(f'qwerqwer[{i}]]')
-    for i in range(10000000):
+    for i in range(100000):
         rb.popleft()
 
 
 if __name__ == '__main__':
     # run the speed test
     import timeit
-    print(timeit.timeit(native, number=1))
-    print(timeit.timeit(external, number=1))
-    print(timeit.timeit(builtin, number=1))
+    print("native", timeit.timeit(native, number=1))
+    print("ring", timeit.timeit(external, number=1))
+    print("deque", timeit.timeit(builtin, number=1))

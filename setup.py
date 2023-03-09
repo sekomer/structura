@@ -14,7 +14,7 @@ module = Extension(
 
 def main():
     setup(name="structura",
-          version="0.1.2",
+          version="0.2.0",
           description="C extension module for common data structures",
           author="alperen serkan aksoz",
           author_email="a.serkanaksoz@gmail.com",

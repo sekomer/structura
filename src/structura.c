@@ -6,42 +6,27 @@ extern PyTypeObject LinkedType;
 extern PyTypeObject RingBufferType;
 
 static PyObject *
-method_fputs(PyObject *self, PyObject *args)
+magic(PyObject *self, PyObject *args)
 {
-    char *str = NULL;
-    char *filename = NULL;
-
-    long bytes_copied = -1;
-
-    /* Parse arguments */
-    if (!PyArg_ParseTuple(args, "ss", &str, &filename))
-        return NULL;
-
-    FILE *fp = fopen(filename, "w");
-
-    if (fp == NULL)
-    {
-        PyErr_SetString(PyExc_IOError, "[Structura] Could not open file");
-        return NULL;
-    }
-
-    bytes_copied = fputs(str, fp);
-    fclose(fp);
-
-    return PyLong_FromLong(bytes_copied);
+    return Py_BuildValue("i", 0x7f454c46);
 }
 
-static PyMethodDef FputsMethods[] = {
-    {"fputs", method_fputs, METH_VARARGS, "Python interface for fputs C library function"},
+const char mithril[] = "\nIn the land of Python, where libraries thrive,\n"
+                       "There lies a function that will revive.\n"
+                       "It returns the magic of Middle-earth lore,\n"
+                       "The ELF that you seek is at the core.This is a magic function\n";
+
+static PyMethodDef StructuraMethods[] = {
+    {"magic", magic, METH_VARARGS, mithril},
     {NULL, NULL, 0, NULL},
 };
 
 static struct PyModuleDef structuramodule = {
     PyModuleDef_HEAD_INIT,
     "structura",
-    "Python interface for the fputs C library function",
+    "Python interface for the Structura library.",
     -1,
-    FputsMethods,
+    StructuraMethods,
 };
 
 PyMODINIT_FUNC PyInit_structura(void)
@@ -49,7 +34,7 @@ PyMODINIT_FUNC PyInit_structura(void)
     PyObject *module = PyModule_Create(&structuramodule);
 
     /* Add int constant by name */
-    PyModule_AddIntConstant(module, "STRUCTURA_FLAG", 1024);
+    PyModule_AddIntConstant(module, "ANSWER", 42);
 
     /* Add RingBuffer type */
     if (PyType_Ready(&RingBufferType) < 0)

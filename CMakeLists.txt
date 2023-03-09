@@ -10,7 +10,7 @@ include_directories(${Python_INCLUDE_DIRS})
 
 include_directories(/usr/include/python3.8)
 
-add_library(_structura SHARED src/ringbuffer.c src/structura.c src/stack.c src/linked.c)
+add_library(_structura SHARED src/structura.c src/ring.c src/stack.c src/linked.c)
 
 set_target_properties(
     structura

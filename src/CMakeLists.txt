@@ -9,7 +9,7 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 # Add all the source files
 set(SOURCES
     structura.c
-    ringbuffer.c
+    ring.c
     stack.c
     linked.c
 )

@@ -31,7 +31,7 @@ check_error $? "Failed to remove wheelhouse"
 
 # upload if --upload is specified
 if [ "$1" == "--upload" ]; then
-    sudo twine upload dist/*
+    twine upload dist/*
     check_error $? "Failed to upload package"
 fi
 

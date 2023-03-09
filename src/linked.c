@@ -41,7 +41,6 @@ Linked_append(Linked *self, PyObject *args)
     if (!PyArg_ParseTuple(args, "O", &data))
         return NULL;
 
-    // TODO: CHECK IF THIS IS NEEDED OR NOT
     Py_IncRef(data);
 
     node = (LinkedNode *)PyMem_Malloc(sizeof(LinkedNode));
@@ -58,6 +57,7 @@ Linked_append(Linked *self, PyObject *args)
 
     self->size++;
 
+    Py_DecRef(data);
     Py_RETURN_NONE;
 }
 
@@ -71,7 +71,6 @@ Linked_prepend(Linked *self, PyObject *args)
     if (!PyArg_ParseTuple(args, "O", &data))
         return NULL;
 
-    // TODO: CHECK IF THIS IS NEEDED OR NOT
     Py_IncRef(data);
 
     node = (LinkedNode *)PyMem_Malloc(sizeof(LinkedNode));
@@ -89,6 +88,7 @@ Linked_prepend(Linked *self, PyObject *args)
 
     self->size++;
 
+    Py_DecRef(data);
     Py_RETURN_NONE;
 }
 
@@ -99,10 +99,7 @@ Linked_pop(Linked *self, PyObject *args)
     LinkedNode *node;
 
     if (self->size == 0)
-    {
-        PyErr_SetString(PyExc_IndexError, "pop from empty list");
-        return NULL;
-    }
+        Py_RETURN_NONE;
 
     node = self->tail;
     data = node->data;
@@ -118,18 +115,18 @@ Linked_pop(Linked *self, PyObject *args)
     return data;
 }
 
+// pop first and return it
 static PyObject *
-Linked_pop_first(Linked *self, PyObject *args)
+Linked_popleft(Linked *self, PyObject *args)
 {
+    PyObject *data;
     LinkedNode *node;
 
     if (self->size == 0)
-    {
-        PyErr_SetString(PyExc_IndexError, "pop from empty list");
-        return NULL;
-    }
+        Py_RETURN_NONE;
 
     node = self->head;
+    data = node->data;
 
     self->head = node->next;
     if (self->head != NULL)
@@ -139,42 +136,93 @@ Linked_pop_first(Linked *self, PyObject *args)
 
     self->size--;
 
-    Py_RETURN_NONE;
+    return data;
 }
 
 static PyObject *
-Linked_delete_at(Linked *self, PyObject *args)
+Linked_popat(Linked *self, PyObject *args)
 {
-    PyObject *index_obj;
+    PyObject *data;
     LinkedNode *node;
 
-    if (!PyArg_ParseTuple(args, "O", &index_obj))
+    long index;
+    if (!PyArg_ParseTuple(args, "l", &index))
         return NULL;
-
-    Py_IncRef(index_obj);
-    long index = PyLong_AsLong(index_obj);
 
     if (index < 0 || index >= self->size)
-    {
-        PyErr_SetString(PyExc_IndexError, "index out of range");
-        return NULL;
-    }
+        Py_RETURN_NONE;
+
+    if (index == 0)
+        return Linked_popleft(self, args);
+
+    if (index == self->size - 1)
+        return Linked_pop(self, args);
 
     node = self->head;
-
     for (long i = 0; i < index; i++)
         node = node->next;
 
-    if (node->prev != NULL)
-        node->prev->next = node->next;
-    if (node->next != NULL)
-        node->next->prev = node->prev;
+    data = node->data;
 
-    // PyMem_Free(node);
+    // patch the linked list
+    node->prev->next = node->next;
+    node->next->prev = node->prev;
+
+    PyMem_Free(node);
 
     self->size--;
 
-    Py_RETURN_NONE;
+    return data;
+}
+
+static PyObject *
+Linked_remove(Linked *self, PyObject *args)
+{
+    PyObject *data;
+    LinkedNode *node;
+
+    if (!PyArg_ParseTuple(args, "O", &data))
+        return NULL;
+
+    Py_IncRef(data);
+
+    if (self->size == 0)
+    {
+        Py_DecRef(data);
+        Py_RETURN_FALSE;
+    }
+
+    node = self->head;
+    while (node != NULL)
+    {
+        if (PyObject_RichCompareBool(node->data, data, Py_EQ) == 1)
+        {
+            // patch the linked list
+            if (node->prev != NULL)
+                node->prev->next = node->next;
+            if (node->next != NULL)
+                node->next->prev = node->prev;
+
+            /* holy blocks solves fucking bugs */
+            if (node == self->head)
+                self->head = node->next;
+            if (node == self->tail)
+                self->tail = node->prev;
+            /* end_holy */
+
+            PyMem_Free(node);
+
+            self->size--;
+
+            Py_DecRef(data);
+            Py_RETURN_TRUE;
+        }
+
+        node = node->next;
+    }
+
+    Py_DecRef(data);
+    Py_RETURN_FALSE;
 }
 
 static PyObject *
@@ -186,7 +234,6 @@ Linked_find(Linked *self, PyObject *args)
     if (!PyArg_ParseTuple(args, "O", &data))
         return NULL;
 
-    // TODO: CHECK IF THIS IS NEEDED OR NOT
     Py_IncRef(data);
 
     node = self->head;
@@ -195,12 +242,16 @@ Linked_find(Linked *self, PyObject *args)
     while (node != NULL)
     {
         if (PyObject_RichCompareBool(node->data, data, Py_EQ) == 1)
+        {
+            Py_DecRef(data);
             return PyLong_FromLong(index);
+        }
 
         node = node->next;
         index++;
     }
 
+    Py_DecRef(data);
     Py_RETURN_NONE;
 }
 
@@ -213,7 +264,7 @@ Linked_size(Linked *self, PyObject *args)
 static PyObject *
 Linked_head(Linked *self, PyObject *args)
 {
-    if (self->head == NULL)
+    if (self->head == NULL || self->size == 0)
         Py_RETURN_NONE;
 
     PyObject *head = self->head->data;
@@ -225,7 +276,7 @@ Linked_head(Linked *self, PyObject *args)
 static PyObject *
 Linked_tail(Linked *self, PyObject *args)
 {
-    if (self->tail == NULL)
+    if (self->tail == NULL || self->size == 0)
         Py_RETURN_NONE;
 
     PyObject *tail = self->tail->data;
@@ -238,8 +289,9 @@ static PyMethodDef Linked_methods[] = {
     {"append", (PyCFunction)Linked_append, METH_VARARGS, "Append an item to the end of the list"},
     {"prepend", (PyCFunction)Linked_prepend, METH_VARARGS, "Append an item to the beginning of the list"},
     {"pop", (PyCFunction)Linked_pop, METH_NOARGS, "Remove and return the last item"},
-    {"pop_first", (PyCFunction)Linked_pop_first, METH_NOARGS, "Remove and return the first item"},
-    {"delete_at", (PyCFunction)Linked_delete_at, METH_VARARGS, "Delete an item at a given index"},
+    {"popleft", (PyCFunction)Linked_popleft, METH_NOARGS, "Remove and return the first item"},
+    {"popat", (PyCFunction)Linked_popat, METH_VARARGS, "Delete an item at a given index"},
+    {"remove", (PyCFunction)Linked_remove, METH_VARARGS, "Remove the first occurence of an item"},
     {"find", (PyCFunction)Linked_find, METH_VARARGS, "Find first occurence of an item and return its index, None otherwise"},
     {"size", (PyCFunction)Linked_size, METH_NOARGS, "Return the size of the list"},
     {"head", (PyCFunction)Linked_head, METH_NOARGS, "Return the first item"},

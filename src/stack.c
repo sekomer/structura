@@ -23,19 +23,13 @@ Stack_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
 
 static int Stack_init(Stack *self, PyObject *args)
 {
-    PyObject *capacity = NULL;
+    long capacity;
 
     // get capacity from args
-    if (!PyArg_ParseTuple(args, "O", &capacity))
+    if (!PyArg_ParseTuple(args, "l", &capacity))
         return -1;
 
-    if (!PyLong_Check(capacity))
-    {
-        PyErr_SetString(PyExc_TypeError, "[TypeError] Capacity must be an integer");
-        return -1;
-    }
-
-    self->capacity = PyLong_AsLong(capacity);
+    self->capacity = capacity;
     self->items = (PyObject **)PyMem_Malloc(self->capacity * sizeof(PyObject *));
 
     if (self->items == NULL)
@@ -97,7 +91,10 @@ static PyObject *Stack_peek(Stack const *self)
         return NULL;
     }
 
-    return self->items[self->top];
+    PyObject *item = self->items[self->top];
+    Py_INCREF(item);
+
+    return item;
 }
 
 static PyObject *Stack_is_empty(Stack const *self)
