@@ -1,17 +1,29 @@
 Structura
 =====================================
 
-.. image:: https://github.com/sekomer/structura/workflows/Tests/badge.svg
+.. explain where does the name come from and what library does
+
+.. image:: https://img.shields.io/pypi/v/structura.svg
+   :alt: PyPI version
+   :target: https://pypi.org/project/structura/
+
+
+
+Structura is a Python library that provides data structures that are implemented in C for better performance.
+Its main purpose is to provide a simple and easy interface for data structures.
+The name comes from the Latin word "structura" which means "structure".
+
+
+
+.. .. image:: https://github.com/sekomer/structura/workflows/Tests/badge.svg
    :alt: Structura build status on GitHub Actions
    :target: https://github.com/sekomer/structura/actions
 
 
-|
 
 .. contents::
 
 
-.. highlight:: bash
 
 Installation
 ------------
@@ -30,7 +42,7 @@ Contributing
 All contributions, suggestions, and optimization ideas are welcome!
 
 Using Structura
-------------
+---------------
 [ TODO ]
 
 Build Instructions
