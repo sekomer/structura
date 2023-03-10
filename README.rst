@@ -36,7 +36,7 @@ From The Python Package Index
 General Information
 -------------------
 - Source code: https://github.com/sekomer/structura
-- Documentation: https://github.com/sekomer/structura/docs
+- Documentation: https://github.com/Sekomer/structura/tree/main/docs
 - Issue tracker: https://github.com/sekomer/structura/issues
 
 Using Structura
