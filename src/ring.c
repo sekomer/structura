@@ -25,21 +25,15 @@ RingBuffer_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
 }
 
 static int
-RingBuffer_init(RingBuffer *self, PyObject *args)
+RingBuffer_init(RingBuffer *self, PyObject *args, PyObject *kwds)
 {
-    PyObject *capacity = NULL;
+    static char *kwlist[] = {"capacity", NULL};
+    long capacity;
 
-    // get capacity from args
-    if (!PyArg_ParseTuple(args, "O", &capacity))
+    if (!PyArg_ParseTupleAndKeywords(args, kwds, "l", kwlist, &capacity))
         return -1;
 
-    if (!PyLong_Check(capacity))
-    {
-        PyErr_SetString(PyExc_TypeError, "[TypeError] Capacity must be an integer");
-        return -1;
-    }
-
-    self->capacity = PyLong_AsLong(capacity);
+    self->capacity = capacity;
     self->items = (PyObject **)PyMem_Malloc(self->capacity * sizeof(PyObject *));
 
     if (self->items == NULL)
@@ -83,6 +77,7 @@ RingBuffer_enqueue(RingBuffer *self, PyObject *args)
 
     if (!PyArg_ParseTuple(args, "O", &item))
         return NULL;
+
     Py_INCREF(item);
 
     // if its full, overwrite the oldest item
@@ -104,7 +99,6 @@ RingBuffer_enqueue(RingBuffer *self, PyObject *args)
         self->size++;
     }
 
-    // TODO: research, should i decref here?
     Py_RETURN_NONE;
 }
 

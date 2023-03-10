@@ -14,10 +14,10 @@ magic(PyObject *self, PyObject *args)
 const char mithril[] = "\nIn the land of Python, where libraries thrive,\n"
                        "There lies a function that will revive.\n"
                        "It returns the magic of Middle-earth lore,\n"
-                       "The ELF that you seek is at the core.This is a magic function\n";
+                       "The ELF that you seek is at the core.\n";
 
 static PyMethodDef StructuraMethods[] = {
-    {"magic", magic, METH_VARARGS, mithril},
+    {"__magic", magic, METH_VARARGS, mithril},
     {NULL, NULL, 0, NULL},
 };
 
@@ -34,7 +34,7 @@ PyMODINIT_FUNC PyInit_structura(void)
     PyObject *module = PyModule_Create(&structuramodule);
 
     /* Add int constant by name */
-    PyModule_AddIntConstant(module, "ANSWER", 42);
+    PyModule_AddIntConstant(module, "__ANSWER", 42);
 
     /* Add RingBuffer type */
     if (PyType_Ready(&RingBufferType) < 0)

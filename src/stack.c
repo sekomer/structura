@@ -21,12 +21,12 @@ Stack_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
     return (PyObject *)self;
 }
 
-static int Stack_init(Stack *self, PyObject *args)
+static int Stack_init(Stack *self, PyObject *args, PyObject *kwds)
 {
-    long capacity;
+    static char *kwlist[] = {"capacity", NULL};
+    long capacity = 0;
 
-    // get capacity from args
-    if (!PyArg_ParseTuple(args, "l", &capacity))
+    if (!PyArg_ParseTupleAndKeywords(args, kwds, "|l", kwlist, &capacity))
         return -1;
 
     self->capacity = capacity;
