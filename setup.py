@@ -27,7 +27,7 @@ def main():
           classifiers=[
               "Development Status :: 3 - Alpha",
               "Intended Audience :: Developers",
-              "License :: MIT License",
+              "License :: OSI Approved :: MIT License",
               "Operating System :: POSIX :: Linux",
               "Programming Language :: C",
               "Programming Language :: Python :: 3",

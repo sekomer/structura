@@ -100,7 +100,7 @@ What's New
 
 What's Coming
 -------------
-PriorityQueues, Trees, Ropes, Graphs, iterables.
+Trees, Ropes, Graphs, iterables.
 
 Contributing
 ------------
