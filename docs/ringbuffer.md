@@ -17,9 +17,9 @@ A RingBuffer is useful when you want to keep a fixed number of items, but you do
 | `peek()`     | O(1)            |
 | `is_empty()` | O(1)            |
 | `is_full()`  | O(1)            |
-| `size()`     | O(1)            |
-| `capacity()` | O(1)            |
-| `clear()`    | O(1)            |
+| `clear()`    | O(n)            |
+| `size`       | O(1)            |
+| `capacity`   | O(1)            |
 
 ## **Space Complexity**
 
@@ -42,7 +42,7 @@ buffer = RingBuffer(3) # capacity of 3
 The capacity of the buffer is the maximum number of items it can hold.
 
 ```python
-buffer.capacity() # 3
+buffer.capacity # 3
 ```
 
 ## **Getting the size**
@@ -50,7 +50,7 @@ buffer.capacity() # 3
 The size of the buffer is the number of items it currently holds.
 
 ```python
-buffer.size() # 0
+buffer.size # 0
 ```
 
 ## **Checking if the buffer is empty**

@@ -6,6 +6,12 @@
 
 [Stack documentation](stack.md)
 
+[Queue documentation](queue.md)
+
 [LinkedList documentation](linkedlist.md)
 
 [RingBuffer documentation](ringbuffer.md)
+
+[HashMap documentation](hashmap.md)
+
+[PriorityQueue documentation](priorityqueue.md)

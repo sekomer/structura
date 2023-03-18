@@ -9,8 +9,11 @@ function check_error {
 sudo rm -rf dist wheelhouse
 check_error $? "Cleanup failed"
 
+# uninstall current version
+pip uninstall -y structura
+
 # build
-sudo python setup.py install sdist bdist_wheel
+sudo python setup.py sdist bdist_wheel
 check_error $? "Build failed"
 
 # manylinux 
@@ -35,9 +38,11 @@ if [ "$1" == "--upload" ]; then
     check_error $? "Failed to upload package"
 fi
 
+# pip install locally
+pip install dist/*.whl
 
 # run tests
 for file in test/*.py; do
-    sudo python $file
+    python $file
     check_error $? "Failed to run $file"
 done

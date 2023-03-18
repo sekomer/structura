@@ -1,7 +1,7 @@
 #define PY_SSIZE_T_CLEAN
+
 #include <Python.h>
 #include <structmember.h>
-
 #include "../include/linked.h"
 
 static PyObject *
@@ -134,6 +134,65 @@ Linked_insert(Linked *self, PyObject *args)
 }
 
 static PyObject *
+Linked_bulk_append(Linked *self, PyObject *args)
+{
+    PyObject *data;
+    LinkedNode **node;
+
+    if (!PyArg_ParseTuple(args, "O", &data))
+        return NULL;
+
+    if (!PySequence_Check(data))
+    {
+        PyErr_SetString(PyExc_TypeError, "data must be a sequence");
+        return NULL;
+    }
+
+    Py_ssize_t SEQ_BEG = 0;
+    Py_ssize_t SEQ_LEN = PySequence_Size(data);
+
+    // allocate memory for all nodes
+    node = (LinkedNode **)PyMem_Malloc(sizeof(LinkedNode *) * SEQ_LEN);
+    if (node == NULL)
+    {
+        PyErr_SetString(PyExc_MemoryError, "failed to allocate memory");
+        return NULL;
+    }
+
+    // initialize all nodes
+    for (long i = SEQ_BEG; i < SEQ_LEN; i++)
+    {
+        node[i] = (LinkedNode *)PyMem_Malloc(sizeof(LinkedNode));
+        node[i]->data = PySequence_GetItem(data, i);
+        Py_IncRef(node[i]->data);
+
+        node[i]->prev = NULL;
+        node[i]->next = NULL;
+    }
+
+    // fix the linked list
+    if (self->tail != NULL)
+        self->tail->next = node[SEQ_BEG];
+
+    node[SEQ_BEG]->prev = self->tail;
+
+    for (long i = SEQ_BEG; i < SEQ_LEN - 1; i++)
+    {
+        node[i]->next = node[i + 1];
+        node[i + 1]->prev = node[i];
+    }
+
+    self->tail = node[SEQ_LEN - 1];
+
+    if (self->head == NULL)
+        self->head = node[SEQ_BEG];
+
+    self->size += SEQ_LEN;
+
+    Py_RETURN_NONE;
+}
+
+static PyObject *
 Linked_pop(Linked *self, PyObject *args)
 {
     PyObject *data;
@@ -152,7 +211,6 @@ Linked_pop(Linked *self, PyObject *args)
     if (self->tail != NULL)
         self->tail->next = NULL;
 
-    Py_IncRef(node->data);
     PyMem_Free(node);
 
     self->size--;
@@ -427,6 +485,7 @@ static PyMethodDef Linked_methods[] = {
     {"append", (PyCFunction)Linked_append, METH_VARARGS, "Append an item to the end of the list"},
     {"prepend", (PyCFunction)Linked_prepend, METH_VARARGS, "Append an item to the beginning of the list"},
     {"insert", (PyCFunction)Linked_insert, METH_VARARGS, "Insert an item at a given index"},
+    {"bulk_append", (PyCFunction)Linked_bulk_append, METH_VARARGS, "Append multiple items to the end of the list"},
     {"pop", (PyCFunction)Linked_pop, METH_NOARGS, "Remove and return the last item"},
     {"popat", (PyCFunction)Linked_popat, METH_VARARGS, "Delete an item at a given index and return it"},
     {"popleft", (PyCFunction)Linked_popleft, METH_NOARGS, "Remove and return the first item"},
@@ -434,11 +493,15 @@ static PyMethodDef Linked_methods[] = {
     {"get", (PyCFunction)Linked_get, METH_VARARGS, "Get an item at a given index"},
     {"set", (PyCFunction)Linked_set, METH_VARARGS, "Set an item at a given index"},
     {"find", (PyCFunction)Linked_find, METH_VARARGS, "Find first occurence of an item and return its index, -1 otherwise"},
-    {"size", (PyCFunction)Linked_size, METH_NOARGS, "Return the size of the list"},
     {"head", (PyCFunction)Linked_head, METH_NOARGS, "Return the first item"},
     {"tail", (PyCFunction)Linked_tail, METH_NOARGS, "Return the last item"},
     {"is_empty", (PyCFunction)Linked_is_empty, METH_NOARGS, "Return True if the list is empty, False otherwise"},
     {"clear", (PyCFunction)Linked_clear, METH_NOARGS, "Clear the list"},
+    {NULL} /* Sentinel */
+};
+
+static PyGetSetDef Linked_getsetters[] = {
+    {"size", (getter)Linked_size, NULL, "Size of the list", NULL},
     {NULL} /* Sentinel */
 };
 
@@ -458,4 +521,5 @@ PyTypeObject LinkedType = {
     .tp_dealloc = (destructor)Linked_dealloc,
     .tp_members = Linked_members,
     .tp_methods = Linked_methods,
+    .tp_getset = Linked_getsetters,
 };

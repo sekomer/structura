@@ -74,13 +74,7 @@ Heres a quick example of how to use it with RingBuffer data structure.
 
 
 
-    
-
-    
-
-
-
-Detailed Documentation and Examples can be found in the `docs <./docs/>`_ folder
+Detailed documentation and examples can be found in the `docs <./docs/>`_ folder
 
 Build Instructions
 ------------------
@@ -98,11 +92,15 @@ What's New
 - 0.2.1
     - Bug fixes
     - Documentation
-
+- 3.0.0
+    - Queue
+    - HashMap
+    - PriorityQueue
+    - Bug fixes
 
 What's Coming
 -------------
-Queues, Hash Tables, Trees, Ropes, Graphs, iterables.
+PriorityQueues, Trees, Ropes, Graphs, iterables.
 
 Contributing
 ------------

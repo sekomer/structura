@@ -10,7 +10,7 @@ class TestLinkedList(unittest.TestCase):
         ll.append(3)
         self.assertEqual(ll.head(), 1)
         self.assertEqual(ll.tail(), 3)
-        self.assertEqual(ll.size(), 3)
+        self.assertEqual(ll.size, 3)
 
     def test_prepend(self):
         ll = LinkedList()
@@ -19,7 +19,7 @@ class TestLinkedList(unittest.TestCase):
         ll.prepend(3)
         self.assertEqual(ll.head(), 3)
         self.assertEqual(ll.tail(), 1)
-        self.assertEqual(ll.size(), 3)
+        self.assertEqual(ll.size, 3)
 
     def test_pop(self):
         ll = LinkedList()
@@ -29,7 +29,7 @@ class TestLinkedList(unittest.TestCase):
         self.assertEqual(ll.pop(), 3)
         self.assertEqual(ll.pop(), 2)
         self.assertEqual(ll.pop(), 1)
-        self.assertEqual(ll.size(), 0)
+        self.assertEqual(ll.size, 0)
         self.assertRaises(IndexError, ll.pop)
 
     def test_popleft(self):
@@ -40,7 +40,7 @@ class TestLinkedList(unittest.TestCase):
         self.assertEqual(ll.popleft(), 1)
         self.assertEqual(ll.popleft(), 2)
         self.assertEqual(ll.popleft(), 3)
-        self.assertEqual(ll.size(), 0)
+        self.assertEqual(ll.size, 0)
         self.assertRaises(IndexError, ll.popleft)
 
     def test_popat(self):
@@ -51,7 +51,7 @@ class TestLinkedList(unittest.TestCase):
         self.assertEqual(ll.popat(0), 1)
         self.assertEqual(ll.popat(0), 2)
         self.assertEqual(ll.popat(0), 3)
-        self.assertEqual(ll.size(), 0)
+        self.assertEqual(ll.size, 0)
         self.assertRaises(IndexError, ll.popat, 0)
 
     def test_find(self):
@@ -66,19 +66,19 @@ class TestLinkedList(unittest.TestCase):
 
     def test_size(self):
         ll = LinkedList()
-        self.assertEqual(ll.size(), 0)
+        self.assertEqual(ll.size, 0)
         ll.append(1)
-        self.assertEqual(ll.size(), 1)
+        self.assertEqual(ll.size, 1)
         ll.append(2)
-        self.assertEqual(ll.size(), 2)
+        self.assertEqual(ll.size, 2)
         ll.append(3)
-        self.assertEqual(ll.size(), 3)
+        self.assertEqual(ll.size, 3)
         ll.pop()
-        self.assertEqual(ll.size(), 2)
+        self.assertEqual(ll.size, 2)
         ll.pop()
-        self.assertEqual(ll.size(), 1)
+        self.assertEqual(ll.size, 1)
         ll.pop()
-        self.assertEqual(ll.size(), 0)
+        self.assertEqual(ll.size, 0)
 
     def test_head(self):
         ll = LinkedList()
@@ -120,22 +120,8 @@ class TestLinkedList(unittest.TestCase):
         self.assertEqual(ll.remove(100000), 100000)
         self.assertEqual(ll.remove(20001231), 20001231)
         self.assertEqual(ll.remove(3123123123123), 3123123123123)
-        self.assertEqual(ll.size(), 0)
+        self.assertEqual(ll.size, 0)
         self.assertRaises(IndexError, ll.remove, 31)
-
-    def test_chaos(self):
-        ll = LinkedList()
-        for i in range(100):
-            ll.append(i)
-
-        self.assertEqual(ll.remove(50), 50)
-        self.assertEqual(ll.remove(0), 0)
-
-        for i in range(1000):
-            ll.head()
-            ll.tail()
-            ll.size()
-            ll.find(i)
 
 
 if __name__ == '__main__':

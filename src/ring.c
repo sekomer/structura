@@ -1,7 +1,7 @@
 #define PY_SSIZE_T_CLEAN
+
 #include <Python.h>
 #include <structmember.h>
-
 #include "../include/ringbuffer.h"
 
 static PyObject *
@@ -27,11 +27,17 @@ RingBuffer_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
 static int
 RingBuffer_init(RingBuffer *self, PyObject *args, PyObject *kwds)
 {
-    static char *kwlist[] = {"capacity", NULL};
     long capacity;
+    static char *kwlist[] = {"capacity", NULL};
 
     if (!PyArg_ParseTupleAndKeywords(args, kwds, "l", kwlist, &capacity))
         return -1;
+
+    if (capacity <= 0)
+    {
+        PyErr_SetString(PyExc_ValueError, "capacity must be greater than 0");
+        return -1;
+    }
 
     self->capacity = capacity;
     self->items = (PyObject **)PyMem_Malloc(self->capacity * sizeof(PyObject *));
@@ -90,7 +96,7 @@ RingBuffer_enqueue(RingBuffer *self, PyObject *args)
         self->head = (self->head + 1) % self->capacity;
         self->tail = (self->tail + 1) % self->capacity;
 
-        Py_DECREF(old_item);
+        Py_DecRef(old_item);
     }
     else
     {
@@ -106,7 +112,10 @@ static PyObject *
 RingBuffer_dequeue(RingBuffer *self)
 {
     if (self->size == 0)
-        Py_RETURN_NONE;
+    {
+        PyErr_SetString(PyExc_IndexError, "RingBuffer is empty");
+        return NULL;
+    }
 
     PyObject *item = self->items[self->head];
     self->items[self->head] = NULL;
@@ -120,12 +129,28 @@ static PyObject *
 RingBuffer_peek(RingBuffer const *self)
 {
     if (self->size == 0)
-        Py_RETURN_NONE;
+    {
+        PyErr_SetString(PyExc_IndexError, "RingBuffer is empty");
+        return NULL;
+    }
 
     PyObject *item = self->items[self->head];
     Py_INCREF(item);
 
     return item;
+}
+
+static PyObject *
+RingBuffer_clear(RingBuffer *self)
+{
+    for (int i = 0; i < self->size; i++)
+        Py_DecRef(self->items[i]);
+
+    self->size = 0;
+    self->head = 0;
+    self->tail = 0;
+
+    Py_RETURN_NONE;
 }
 
 static PyObject *
@@ -150,8 +175,13 @@ static PyMethodDef RingBuffer_methods[] = {
     {"enqueue", (PyCFunction)RingBuffer_enqueue, METH_VARARGS, "Add an item to the RingBuffer"},
     {"dequeue", (PyCFunction)RingBuffer_dequeue, METH_NOARGS, "Remove and return the oldest item from the RingBuffer"},
     {"peek", (PyCFunction)RingBuffer_peek, METH_NOARGS, "Return the oldest item from the RingBuffer"},
-    {"size", (PyCFunction)RingBuffer_size, METH_NOARGS, "Return the size of the RingBuffer"},
-    {"capacity", (PyCFunction)RingBuffer_capacity, METH_NOARGS, "Return the capacity of the RingBuffer"},
+    {"clear", (PyCFunction)RingBuffer_clear, METH_NOARGS, "Remove all items from the RingBuffer"},
+    {NULL} /* Sentinel */
+};
+
+static PyGetSetDef RingBuffer_getsetters[] = {
+    {"size", (getter)RingBuffer_size, NULL, "Size of the RingBuffer", NULL},
+    {"capacity", (getter)RingBuffer_capacity, NULL, "Capacity of the RingBuffer", NULL},
     {NULL} /* Sentinel */
 };
 
@@ -167,4 +197,5 @@ PyTypeObject RingBufferType = {
     .tp_doc = "RingBuffer data structure",
     .tp_methods = RingBuffer_methods,
     .tp_members = RingBuffer_members,
+    .tp_getset = RingBuffer_getsetters,
 };

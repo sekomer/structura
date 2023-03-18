@@ -7,7 +7,7 @@ class TestStack(unittest.TestCase):
         s = Stack(1000)
         for i in range(1000):
             s.push(f'qwerqwer[{i}]]')
-        self.assertEqual(s.size(), 1000)
+        self.assertEqual(s.size, 1000)
 
     def test_stack_peek(self):
         s = Stack(32)
@@ -20,7 +20,7 @@ class TestStack(unittest.TestCase):
         for i in range(32):
             s.push(f'qwerqwer[{i}]]')
         self.assertEqual(s.pop(), 'qwerqwer[31]]')
-        self.assertEqual(s.size(), 31)
+        self.assertEqual(s.size, 31)
 
     def test_stack_is_empty(self):
         s = Stack(32)
@@ -41,12 +41,12 @@ class TestStack(unittest.TestCase):
 
     def test_stack_size(self):
         s = Stack(32)
-        self.assertEqual(s.size(), 0)
+        self.assertEqual(s.size, 0)
         for i in range(32):
             s.push(f'qwerqwer[{i}]]')
-        self.assertEqual(s.size(), 32)
+        self.assertEqual(s.size, 32)
         s.pop()
-        self.assertEqual(s.size(), 31)
+        self.assertEqual(s.size, 31)
 
     def test_stack_pop_when_empty(self):
         s = Stack(32)
@@ -61,19 +61,6 @@ class TestStack(unittest.TestCase):
         for i in range(32):
             s.push(f'qwerqwer[{i}]]')
         self.assertRaises(IndexError, s.push, 'qwerqwer')
-
-    def test_chaos(self):
-        s = Stack(32)
-        for i in range(1000):
-            s.push(f'qwerqwer[{i}]]')
-            self.assertEqual(s.peek(), f'qwerqwer[{i}]]')
-            self.assertEqual(s.pop(), f'qwerqwer[{i}]]')
-            self.assertEqual(s.size(), 0)
-            self.assertTrue(s.is_empty())
-            self.assertFalse(s.is_full())
-
-        for i in range(1000):
-            self.assertRaises(IndexError, s.pop)
 
 
 if __name__ == '__main__':

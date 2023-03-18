@@ -16,23 +16,24 @@ A Linked List can be used to implement a Stack or Queue. It can also be used as 
 
 ## **Time Complexity**
 
-| Operation    | Time Complexity |
-| ------------ | --------------- |
-| `append()`   | O(1)            |
-| `prepend()`  | O(1)            |
-| `insert()`   | O(n)            |
-| `pop()`      | O(1)            |
-| `popat()`    | O(n)            |
-| `popleft()`  | O(1)            |
-| `remove()`   | O(n)            |
-| `get()`      | O(n)            |
-| `set()`      | O(n)            |
-| `find()`     | O(n)            |
-| `size()`     | O(1)            |
-| `head()`     | O(1)            |
-| `tail()`     | O(1)            |
-| `is_empty()` | O(1)            |
-| `clear()`    | O(1)            |
+| Operation       | Time Complexity |
+| --------------- | --------------- |
+| `append()`      | O(1)            |
+| `prepend()`     | O(1)            |
+| `insert()`      | O(n)            |
+| `bulk_append()` | O(n)            |
+| `pop()`         | O(1)            |
+| `popat()`       | O(n)            |
+| `popleft()`     | O(1)            |
+| `remove()`      | O(n)            |
+| `get()`         | O(n)            |
+| `set()`         | O(n)            |
+| `find()`        | O(n)            |
+| `head()`        | O(1)            |
+| `tail()`        | O(1)            |
+| `is_empty()`    | O(1)            |
+| `clear()`       | O(n)            |
+| `size`          | O(1)            |
 
 ## **Space Complexity**
 
@@ -75,12 +76,20 @@ ll.prepend(-1) # [-1, 0, 1, 2, 3]
 ll.insert(2, 1.5) # [-1, 0, 1, 1.5, 2, 3]
 ```
 
+## **Bulk appending items**
+
+`bulk_append()` will add multiple items to the end of the list. Its only faster than appending items one by one if you are appending too many items.
+
+```python
+ll.bulk_append([4, 5, 6]) # [-1, 0, 1, 1.5, 2, 3, 4, 5, 6]
+```
+
 ## **Popping an item**
 
 `pop()` will remove the last item in the list and return it.
 
 ```python
-ll.pop() # [-1, 0, 1.5, 2]
+ll.pop() # [-1, 0, 1, 1.5, 2, 3, 4, 5]
 ```
 
 ## **Popat an item**
@@ -88,7 +97,7 @@ ll.pop() # [-1, 0, 1.5, 2]
 `popat()` will remove an item at a specified index and return it.
 
 ```python
-ll.popat(2) # [-1, 0, 1.5, 2, 3]
+ll.popat(0) # [0, 1, 1.5, 2, 3, 4, 5]
 ```
 
 ## **Popleft an item**
@@ -96,7 +105,7 @@ ll.popat(2) # [-1, 0, 1.5, 2, 3]
 `popleft()` will remove the first item in the list and return it.
 
 ```python
-ll.popleft() # [0, 1.5, 2]
+ll.popleft() # [1, 1.5, 2, 3, 4, 5]
 ```
 
 ## **Removing an item**
@@ -104,7 +113,7 @@ ll.popleft() # [0, 1.5, 2]
 `remove()` will remove the first occurrence of an item in the list.
 
 ```python
-ll.remove(1.5) # [0, 2]
+ll.remove(1) # [1.5, 2, 3, 4, 5]
 ```
 
 ## **Getting an item**
@@ -112,7 +121,7 @@ ll.remove(1.5) # [0, 2]
 `get()` will return the item at a specified index.
 
 ```python
-ll.get(0) # 0
+ll.get(0) # 1.5
 ll.get(1) # 2
 ```
 
@@ -121,8 +130,8 @@ ll.get(1) # 2
 `set()` will set the item at a specified index.
 
 ```python
-ll.set(0, 1) # [1, 2]
-ll.set(1, 3) # [1, 3]
+ll.set(0, 1) # [1, 2, 3, 4, 5]
+ll.set(1, 2) # [1, 2, 3, 4, 5]
 ```
 
 ## **Finding an item**
@@ -131,15 +140,15 @@ ll.set(1, 3) # [1, 3]
 
 ```python
 ll.find(1) # 0
-ll.find(3) # 1
+ll.find(2) # 1
 ```
 
 ## **Getting the size**
 
-`size()` will return the number of items in the list.
+`size` attribute will return the number of items in the list.
 
 ```python
-ll.size() # 2
+ll.size # 5
 ```
 
 ## **Getting the head**
@@ -155,7 +164,7 @@ ll.head() # 1
 `tail()` will return the last item in the list.
 
 ```python
-ll.tail() # 3
+ll.tail() # 5
 ```
 
 ## **Is the list empty?**

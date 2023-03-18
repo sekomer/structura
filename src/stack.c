@@ -1,7 +1,7 @@
 #define PY_SSIZE_T_CLEAN
+
 #include <Python.h>
 #include <structmember.h>
-
 #include "../include/stack.h"
 
 static PyObject *
@@ -23,11 +23,17 @@ Stack_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
 
 static int Stack_init(Stack *self, PyObject *args, PyObject *kwds)
 {
+    long capacity;
     static char *kwlist[] = {"capacity", NULL};
-    long capacity = 0;
 
-    if (!PyArg_ParseTupleAndKeywords(args, kwds, "|l", kwlist, &capacity))
+    if (!PyArg_ParseTupleAndKeywords(args, kwds, "l", kwlist, &capacity))
         return -1;
+
+    if (capacity <= 0)
+    {
+        PyErr_SetString(PyExc_ValueError, "capacity must be greater than 0");
+        return -1;
+    }
 
     self->capacity = capacity;
     self->items = (PyObject **)PyMem_Malloc(self->capacity * sizeof(PyObject *));
@@ -53,6 +59,7 @@ static PyObject *Stack_push(Stack *self, PyObject *args)
 
     if (!PyArg_ParseTuple(args, "O", &item))
         return NULL;
+
     Py_IncRef(item);
 
     if (self->top == self->capacity - 1)
@@ -92,7 +99,7 @@ static PyObject *Stack_peek(Stack const *self)
     }
 
     PyObject *item = self->items[self->top];
-    Py_INCREF(item);
+    Py_IncRef(item);
 
     return item;
 }
@@ -113,6 +120,17 @@ static PyObject *Stack_is_full(Stack const *self)
     Py_RETURN_FALSE;
 }
 
+static PyObject *Stack_clear(Stack *self)
+{
+    for (int i = 0; i < self->size; i++)
+        Py_DecRef(self->items[i]);
+
+    self->top = -1;
+    self->size = 0;
+
+    Py_RETURN_NONE;
+}
+
 static PyObject *Stack_size(Stack const *self)
 {
     return PyLong_FromLong(self->size);
@@ -124,7 +142,7 @@ static PyObject *Stack_capacity(Stack const *self)
 }
 
 static PyMemberDef Stack_members[] = {
-    {NULL},
+    {NULL}, /* Sentinel */
 };
 
 static PyMethodDef Stack_methods[] = {
@@ -133,9 +151,14 @@ static PyMethodDef Stack_methods[] = {
     {"peek", (PyCFunction)Stack_peek, METH_NOARGS, "Peek the top item from the stack"},
     {"is_empty", (PyCFunction)Stack_is_empty, METH_NOARGS, "Check if the stack is empty"},
     {"is_full", (PyCFunction)Stack_is_full, METH_NOARGS, "Check if the stack is full"},
-    {"size", (PyCFunction)Stack_size, METH_NOARGS, "Get the size of the stack"},
-    {"capacity", (PyCFunction)Stack_capacity, METH_NOARGS, "Get the capacity of the stack"},
+    {"clear", (PyCFunction)Stack_clear, METH_NOARGS, "Clear the stack"},
     {NULL},
+};
+
+static PyGetSetDef Stack_getsetters[] = {
+    {"size", (getter)Stack_size, NULL, "Size of the stack", NULL},
+    {"capacity", (getter)Stack_capacity, NULL, "Capacity of the stack", NULL},
+    {NULL} /* Sentinel */
 };
 
 PyTypeObject StackType = {
@@ -150,4 +173,5 @@ PyTypeObject StackType = {
     .tp_doc = "Stack data structure",
     .tp_methods = Stack_methods,
     .tp_members = Stack_members,
+    .tp_getset = Stack_getsetters,
 };

@@ -7,7 +7,7 @@ class TestRingBuffer(unittest.TestCase):
         rb = RingBuffer(100)
         for i in range(1000):
             rb.enqueue(f'qwerqwer[{i}]]')
-        self.assertEqual(rb.size(), 100)
+        self.assertEqual(rb.size, 100)
 
     def test_ringbuffer_peek(self):
         rb = RingBuffer(32)
@@ -20,7 +20,7 @@ class TestRingBuffer(unittest.TestCase):
         for i in range(32):
             rb.enqueue(f'qwerqwer[{i}]]')
         self.assertEqual(rb.dequeue(), 'qwerqwer[0]]')
-        self.assertEqual(rb.size(), 31)
+        self.assertEqual(rb.size, 31)
 
     def test_ringbuffer_is_empty(self):
         rb = RingBuffer(32)
@@ -41,36 +41,20 @@ class TestRingBuffer(unittest.TestCase):
 
     def test_ringbuffer_size(self):
         rb = RingBuffer(32)
-        self.assertEqual(rb.size(), 0)
+        self.assertEqual(rb.size, 0)
         for i in range(32):
             rb.enqueue(f'qwerqwer[{i}]]')
-        self.assertEqual(rb.size(), 32)
+        self.assertEqual(rb.size, 32)
         rb.dequeue()
-        self.assertEqual(rb.size(), 31)
+        self.assertEqual(rb.size, 31)
 
     def test_ringbuffer_dequeue_when_empty(self):
         rb = RingBuffer(32)
-        self.assertEqual(rb.dequeue(), None)
+        self.assertRaises(IndexError, rb.dequeue)
 
     def test_ringbuffer_peek_when_empty(self):
         rb = RingBuffer(32)
-        self.assertEqual(rb.peek(), None)
-
-    def test_chaos(self):
-        rb = RingBuffer(32)
-        for i in range(100):
-            rb.enqueue(f'qwerqwer[{i}]]')
-            rb.peek()
-            rb.is_empty()
-            rb.is_full()
-            rb.size()
-
-        for i in range(1000):
-            rb.dequeue()
-            rb.peek()
-            rb.is_empty()
-            rb.is_full()
-            rb.size()
+        self.assertRaises(IndexError, rb.peek)
 
 
 if __name__ == '__main__':

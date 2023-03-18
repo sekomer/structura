@@ -11,7 +11,10 @@ set(SOURCES
     structura.c
     ring.c
     stack.c
+    queue.c
     linked.c
+    hashmap.c
+    priority.c
 )
 
 # add headers from include directory

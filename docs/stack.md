@@ -16,9 +16,9 @@ A Stack can be used for evaluating expressions consisting of operands and operat
 | `pop()`      | O(1)            |
 | `peek()`     | O(1)            |
 | `is_empty()` | O(1)            |
-| `size()`     | O(1)            |
-| `capacity()` | O(1)            |
-| `clear()`    | O(1)            |
+| `clear()`    | O(n)            |
+| `size`       | O(1)            |
+| `capacity`   | O(1)            |
 
 ## **Space Complexity**
 
@@ -39,7 +39,7 @@ stack = Stack(3) # capacity of 3
 The capacity of the stack is the maximum number of items it can hold.
 
 ```python
-stack.capacity() # 3
+stack.capacity # 3
 ```
 
 ## **Getting the size**
@@ -47,7 +47,7 @@ stack.capacity() # 3
 The size of the stack is the number of items it currently holds.
 
 ```python
-stack.size() # 0
+stack.size # 0
 ```
 
 ## **Checking if the stack is empty**
