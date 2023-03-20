@@ -39,7 +39,7 @@ PyMODINIT_FUNC PyInit_structura(void)
     PyObject *module = PyModule_Create(&structuramodule);
 
     /* add version */
-    PyModule_AddStringConstant(module, "__version__", "0.3.0");
+    PyModule_AddStringConstant(module, "__ver__", "0.3.0");
 
     /* add docstring */
     PyModule_AddStringConstant(module, "__doc__", "Python interface for the structura.");

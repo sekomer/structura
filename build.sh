@@ -13,7 +13,12 @@ check_error $? "Cleanup failed"
 pip uninstall -y structura
 
 # build
-sudo python setup.py sdist bdist_wheel
+sudo python setup.py sdist
+sudo python setup.py bdist_wheel
+
+# sudo python3 -m build --sdist 
+# sudo python3 -m build --wheel 
+
 check_error $? "Build failed"
 
 # manylinux 
@@ -21,15 +26,15 @@ auditwheel repair dist/*.whl
 check_error $? "auditwheel failed"
 
 # remove wheel other than manylinux
-sudo rm dist/*.whl
+# sudo rm dist/*.whl
 check_error $? "Failed to remove wheel"
 
 # copy manylinux to dist
-sudo cp wheelhouse/*.whl dist/
+# sudo cp wheelhouse/*.whl dist/
 check_error $? "Failed to copy manylinux to dist"
 
 # remove wheelhouse
-sudo rm -rf wheelhouse
+# sudo rm -rf wheelhouse
 check_error $? "Failed to remove wheelhouse"
 
 # upload if --upload is specified
@@ -40,6 +45,7 @@ fi
 
 # pip install locally
 pip install dist/*.whl
+check_error $? "Failed to run $file"
 
 # run tests
 for file in test/*.py; do
