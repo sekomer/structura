@@ -9,6 +9,7 @@ module = setuptools.Extension(
     name="structura",
     define_macros=[("MAJOR_VERSION", "0"), ("MINOR_VERSION", "3")],
     sources=glob.glob("./src/*.c"),
+    headers=glob.glob("./include/*.h"),
     include_dirs=["include"],
 )
 
