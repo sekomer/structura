@@ -9,7 +9,7 @@ from setuptools.command.build_ext import build_ext
 sdist_sources = glob.glob("src/*.c") + glob.glob("include/*.h")
 otherwise = glob.glob("src/*.c")
 
-sources = sdist_sources if 'sdist' in sys.argv else otherwise
+sources = sdist_sources if ('sdist' in sys.argv) else otherwise
 
 module = setuptools.Extension(
     name="structura",
