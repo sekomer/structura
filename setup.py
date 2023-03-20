@@ -42,7 +42,7 @@ def main():
                          "License :: OSI Approved :: MIT License",
                          "Operating System :: POSIX :: Linux",
                          "Programming Language :: C",
-                         "Programming Language :: Python :: 3.x",
+                         "Programming Language :: Python :: 3",
                          "Topic :: Software Development :: Libraries :: Python Modules",
                      ],
                      options={'bdist_wheel': {'universal': True},
