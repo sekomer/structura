@@ -1,15 +1,20 @@
 import os
+import sys
 import glob
 import pathlib
 import setuptools
 from setuptools.command.build_ext import build_ext
 
 
+sdist_sources = glob.glob("src/*.c") + glob.glob("include/*.h")
+otherwise = glob.glob("src/*.c")
+
+sources = sdist_sources if 'sdist' in sys.argv else otherwise
+
 module = setuptools.Extension(
     name="structura",
     define_macros=[("MAJOR_VERSION", "0"), ("MINOR_VERSION", "3")],
-    sources=glob.glob("./src/*.c"),
-    headers=glob.glob("./include/*.h"),
+    sources=sources,
     include_dirs=["include"],
 )
 
