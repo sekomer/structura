@@ -30,7 +30,8 @@ The name comes from the Latin word **structura** which means **structure**.
 
 Installation
 ------------
-From The Python Package Index. Python 3.5 and above are supported.
+Structura is available on PyPI and can be installed with pip. 
+It requires Python 3.5 or above.
 
 .. code-block:: bash
 
@@ -44,6 +45,11 @@ From Source
    git clone github.com/sekomer/structura
    cd structura
    sudo python3 setup.py install
+
+
+Documentation
+-------------
+Detailed documentation can be found in the `docs <./docs/>`_ folder.
 
 
 General Information
@@ -92,7 +98,7 @@ Detailed documentation and examples can be found in the `docs <./docs/>`_ folder
 
 What's New
 ----------
-- 0.1.2
+- 0.1.0
     - RingBuffer
 - 0.2.0
     - Stack
@@ -106,7 +112,7 @@ What's New
     - PriorityQueue
     - Bug fixes
 - 3.0.1
-    - Multiple Python versions support. 3.5 and above.
+    - Python version support added. (3.5 and above)
 
 What's Coming
 -------------
