@@ -7,6 +7,8 @@ Structura
    :alt: PyPI version
    :target: https://pypi.org/project/structura/
 
+.. image:: https://static.pepy.tech/personalized-badge/structura?period=total&units=none&left_color=grey&right_color=brightgreen&left_text=Downloads
+ :target: https://pepy.tech/project/structura
 
 
 ``Structura`` is a Python library that provides data structures that are implemented in C for better performance.
