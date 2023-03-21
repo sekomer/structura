@@ -15,9 +15,34 @@ check_error $? "Cleanup failed"
 pip uninstall -y structura
 
 # build
-./dist.sh
+sudo /home/selftech/miniconda3/envs/py35/bin/python setup.py sdist
+sudo /home/selftech/miniconda3/envs/py35/bin/python setup.py bdist_wheel
+check_error $? "Build 35 failed"
 
-check_error $? "Build failed"
+sudo /home/selftech/miniconda3/envs/py36/bin/python setup.py sdist
+sudo /home/selftech/miniconda3/envs/py36/bin/python setup.py bdist_wheel
+check_error $? "Build 36 failed"
+
+sudo /home/selftech/miniconda3/envs/py37/bin/python setup.py sdist
+sudo /home/selftech/miniconda3/envs/py37/bin/python setup.py bdist_wheel
+check_error $? "Build 37 failed"
+
+sudo /home/selftech/miniconda3/envs/py38/bin/python setup.py sdist
+sudo /home/selftech/miniconda3/envs/py38/bin/python setup.py bdist_wheel
+check_error $? "Build 38 failed"
+
+sudo /home/selftech/miniconda3/envs/py39/bin/python setup.py sdist
+sudo /home/selftech/miniconda3/envs/py39/bin/python setup.py bdist_wheel
+check_error $? "Build 39 failed"
+
+sudo /home/selftech/miniconda3/envs/py310/bin/python setup.py sdist
+sudo /home/selftech/miniconda3/envs/py310/bin/python setup.py bdist_wheel
+check_error $? "Build 310 failed"
+
+sudo /home/selftech/miniconda3/envs/py311/bin/python setup.py sdist
+sudo /home/selftech/miniconda3/envs/py311/bin/python setup.py bdist_wheel
+check_error $? "Build 311 failed"
+
 
 # manylinux 
 auditwheel repair dist/*.whl
@@ -30,7 +55,7 @@ if [ "$1" == "--upload" ]; then
 fi
 
 # pip install locally
-pip install dist/*cp38*.whl
+pip install wheelhouse/*cp38*.whl
 check_error $? "Failed to run $file"
 
 # run tests

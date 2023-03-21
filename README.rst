@@ -28,11 +28,19 @@ The name comes from the Latin word **structura** which means **structure**.
 
 Installation
 ------------
-From The Python Package Index
+From The Python Package Index. Python 3.5 and above are supported.
 
 ``pip install structura``
+
     
-    
+From Source
+
+``git clone github.com/sekomer/structura``
+
+``cd structura``
+
+``sudo python3 setup.py install``
+
 General Information
 -------------------
 - Source code: https://github.com/sekomer/structura
@@ -76,11 +84,6 @@ Heres a quick example of how to use it with RingBuffer data structure.
 
 Detailed documentation and examples can be found in the `docs <./docs/>`_ folder
 
-Build Instructions
-------------------
-To build `structura` from source, you should clone the repo and run the following command
-
-``sudo python3 setup.py install``
 
 What's New
 ----------
@@ -97,6 +100,8 @@ What's New
     - HashMap
     - PriorityQueue
     - Bug fixes
+- 3.0.1
+    - Multiple Python versions support (3.5 3.6, 3.7, 3.8, 3.9, 3.10, 3.11)
 
 What's Coming
 -------------
