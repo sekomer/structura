@@ -104,7 +104,7 @@ What's New
     - PriorityQueue
     - Bug fixes
 - 3.0.1
-    - Multiple Python versions support (3.5 3.6, 3.7, 3.8, 3.9, 3.10, 3.11)
+    - Multiple Python versions support. 3.5 and above.
 
 What's Coming
 -------------
