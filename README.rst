@@ -30,16 +30,19 @@ Installation
 ------------
 From The Python Package Index. Python 3.5 and above are supported.
 
-``pip install structura``
+.. code-block:: bash
+
+   pip install structura
 
     
 From Source
 
-``git clone github.com/sekomer/structura``
+.. code-block:: bash
 
-``cd structura``
+   git clone github.com/sekomer/structura
+   cd structura
+   sudo python3 setup.py install
 
-``sudo python3 setup.py install``
 
 General Information
 -------------------
