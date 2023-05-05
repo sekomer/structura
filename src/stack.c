@@ -141,6 +141,24 @@ static PyObject *Stack_capacity(Stack const *self)
     return PyLong_FromLong(self->capacity);
 }
 
+static PyObject *Stack_print(Stack const *self)
+{
+    if (self->top == -1) {
+        printf("Stack is empty\n");
+        Py_RETURN_NONE;
+    }
+
+    for (int i = 0; i <= self->top; i++)
+    {
+        PyObject *item = self->items[i];
+        PyObject_Print(item, stdout, Py_PRINT_RAW);
+        printf(" ");
+    }
+    printf("\n");
+
+    Py_RETURN_NONE;
+}
+
 static PyMemberDef Stack_members[] = {
     {NULL}, /* Sentinel */
 };

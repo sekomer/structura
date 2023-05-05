@@ -77,6 +77,14 @@ stack.push(2) # [1, 2]
 stack.push(3) # [1, 2, 3]
 ```
 
+## **Listing all items**
+
+`items()` will return a list of all items in the stack.
+
+```python
+stack.items() # [1, 2, 3]
+```
+
 ## **Removing an item**
 
 `pop()` will remove and return the item at the top of the stack.
