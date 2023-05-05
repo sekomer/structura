@@ -170,6 +170,7 @@ static PyMethodDef Stack_methods[] = {
     {"is_empty", (PyCFunction)Stack_is_empty, METH_NOARGS, "Check if the stack is empty"},
     {"is_full", (PyCFunction)Stack_is_full, METH_NOARGS, "Check if the stack is full"},
     {"clear", (PyCFunction)Stack_clear, METH_NOARGS, "Clear the stack"},
+    {"items", (PyCFunction)Stack_print, METH_NOARGS, "Print all elements of the stack"},
     {NULL},
 };
 
